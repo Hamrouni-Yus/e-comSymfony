@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classe\Cart;
 use App\Entity\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,7 @@ class OrderSuccessController extends AbstractController
     /**
      * @Route("/commande/merci/{stripeSessionId}", name="order_validate")
      */
-    public function index($stripeSessionId): Response
+    public function index(Cart $cart, $stripeSessionId): Response
     {
         $order = $this->entityManager->getRepository(Order::class)->findOneByStripeSessionId($stripeSessionId);
 
@@ -28,6 +29,7 @@ class OrderSuccessController extends AbstractController
         }
 
         if (!$order->getIsPaid()) {
+            $cart->remove();
             $order->setIsPaid(1);
             $this->entityManager->flush();
         }

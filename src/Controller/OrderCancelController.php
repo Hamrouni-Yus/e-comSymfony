@@ -27,6 +27,8 @@ class OrderCancelController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        return $this->render('order_cancel/index.html.twig',);
+        return $this->render('order_cancel/index.html.twig', [
+            'order' => $order
+        ]);
     }
 }
